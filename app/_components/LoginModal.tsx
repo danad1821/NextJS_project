@@ -2,6 +2,7 @@
 import { IoMdClose } from "react-icons/io";
 import axios from "axios";
 import { useState } from "react";
+import { useRouter } from 'next/navigation'
 
 type LoginModalProps = {
   closeModal: () => void;
@@ -14,6 +15,8 @@ type LoginInfo = {
 };
 
 export default function LoginModal({ closeModal }: LoginModalProps) {
+  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const [loginInfo, setLoginInfo] = useState<LoginInfo>({
     email: "",
     password: "",
@@ -21,11 +24,31 @@ export default function LoginModal({ closeModal }: LoginModalProps) {
   });
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if(!loginInfo.email || !loginInfo.password) {
+      setErrorMessage("Please fill in all fields.");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+      return;
+    }
+
+    if(!/\S+@\S+\.\S+/.test(loginInfo.email)) {
+      setErrorMessage("Please enter a valid email address.");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+      return;
+    }
+
     try {
       const response = await axios.post("/api/users", loginInfo);
-      console.log("Login successful:", response.data);
       closeModal();
+      router.push('/dashboard');
     } catch (error) {
+      setErrorMessage("Login failed. Please check your credentials and try again.");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
       console.error("Login failed:", error);
     }
   };
@@ -71,6 +94,9 @@ export default function LoginModal({ closeModal }: LoginModalProps) {
               <button type="submit">Login</button>
             </div>
           </form>
+          {errorMessage && (
+            <div className="mt-2 text-red-500">{errorMessage}</div>
+          )}
         </div>
       </div>
     </>

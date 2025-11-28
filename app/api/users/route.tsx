@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/app/_lib/db";
 import User from "@/app/_models/User";
 import bcrypt from "bcryptjs";
-import { error } from "console";
+import { cookies } from 'next/headers';
 
 async function hashPassword(password: string): Promise<string> {
   try {
@@ -46,12 +46,16 @@ export async function POST(request: Request) {
               { status: 401 }
             );
           }
+          const cookieStore = await cookies();
+          cookieStore.set("user", JSON.stringify(user));
 
           return NextResponse.json(user, { status: 200 });
         }
       } else if (data.type === "Register") {
         data.password = await hashPassword(data.password);
         const createdUser = await User.create(data);
+        const cookieStore = await cookies();
+        cookieStore.set("user", JSON.stringify(createdUser));
         return NextResponse.json(createdUser, { status: 201 });
       }
     }

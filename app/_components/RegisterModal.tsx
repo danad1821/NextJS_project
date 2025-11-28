@@ -2,6 +2,8 @@
 import { IoMdClose } from "react-icons/io";
 import { useState } from "react";
 import axios from "axios";
+import { useRouter } from 'next/navigation'
+
 type RegisterModalProps = {
   closeModal: () => void;
 };
@@ -14,6 +16,7 @@ type RegisterInfo = {
 };
 
 export default function RegisterModal({ closeModal }: RegisterModalProps) {
+  const router = useRouter();
   const [registerInfo, setRegisterInfo] = useState<RegisterInfo>({
     email: "",
     password: "",
@@ -33,9 +36,26 @@ export default function RegisterModal({ closeModal }: RegisterModalProps) {
       return;
     }
 
+    if (registerInfo.password.length < 6) {
+      setErrorMessage("Password must be at least 6 characters long.");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+      return;
+    }
+
+    if (!/\S+@\S+\.\S+/.test(registerInfo.email)) {
+      setErrorMessage("Please enter a valid email address.");
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 5000);
+      return;
+    }
+
     try {
       const response = await axios.post("/api/users", registerInfo);
       closeModal();
+      router.push('/dashboard');
     } catch (error: any) {
       const message =
         error.response?.data?.error || "An unknown error occurred.";

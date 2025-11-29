@@ -42,6 +42,20 @@ export default function Dashboard() {
     }
   };
 
+  const editProduct = async (productId: string, updatedData: any) => {
+    try {
+      const response = await axios.put(`/api/products/${productId}`, updatedData);
+      const updatedProducts = products.map((product) =>
+        product._id === productId ? response.data : product
+      );
+      setProducts(updatedProducts);
+      setDisplayedProducts(updatedProducts);
+    }
+    catch (error) {
+      console.error("Error editing product:", error);
+    }
+  };
+
   const deleteProduct = async (productId: string) => {
     try{
       await axios.delete(`/api/products/${productId}`);
@@ -147,7 +161,7 @@ export default function Dashboard() {
                 <p>No products available.</p>
               ) : (
                 displayedProducts.map((product) => (
-                  <ProductCard key={product._id} product={product} deleteProduct={deleteProduct} />
+                  <ProductCard key={product._id} product={product} deleteProduct={deleteProduct} editProduct={editProduct} categories={categories} />
                 ))
               )}
             </div>

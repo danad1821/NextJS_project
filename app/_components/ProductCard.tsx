@@ -33,27 +33,32 @@ export default function ProductCard({
 
   return (
     <>
-      <div className="border border-black rounded-xl p-3 flex flex-col gap-2 min-w-50 m-2">
-        <div className="flex justify-center max-w-50 max-h-50">
+      <div className="border border-black rounded-xl p-3 flex flex-col gap-2 w-64 h-96 mr-8 mb-8 shadow-md">
+        <div className="flex justify-center w-full h-40 overflow-hidden rounded-lg">
           <Image
             src={product.image}
             alt={product.title}
-            width={200}
+            width={150}
             height={150}
-            className=""
+            className="object-cover w-full h-full"
           />
         </div>
-        <h4 className="text-lg font-bold">{product.title}</h4>
-        <div>
-          <p>{product.description}</p>
-          <p>Price: ${product.price}</p>
-          <p>Cost: ${product.cost}</p>
-          <p>Quantity: {product.quantity}</p>
-          <p>Category: {categoryName}</p>
-          <p>Status: {product.isActive ? "Active" : "Inactive"}</p>
+        <h4 className="text-lg font-bold ">{product.title}</h4>
+        <div className="text-sm">
+          <p className="">{product.description.split(" ").slice(0,10).join(" ")}...</p>
+          <p className="">Price: ${product.price}</p>
+          <p className="">Cost: ${product.cost}</p>
+          <p className="">Quantity: {product.quantity}</p>
+          <p className="">Category: {categoryName}</p>
+          <p className="">Status: {product.isActive ? "Active" : "Inactive"}</p>
         </div>
         <div className="flex items-center justify-end gap-2">
-          <button className="bg-green-500 text-white p-2 rounded-xl" onClick={()=>{setShowEditModal(true)}}>
+          <button
+            className="bg-green-500 text-white p-2 rounded-xl"
+            onClick={() => {
+              setShowEditModal(true);
+            }}
+          >
             Edit
           </button>
           <button
@@ -66,6 +71,7 @@ export default function ProductCard({
           </button>
         </div>
       </div>
+
       {showDeleteModal && (
         <DeleteModal
           deleteFunction={deleteProduct}
@@ -75,18 +81,16 @@ export default function ProductCard({
           itemId={product._id}
         />
       )}
-      {
-        showEditModal && (
-          <EditProductModal
-            editProduct={editProduct}
-            closeModal={() => {
-              setShowEditModal(false);
-            }}
-            product={product}
-            categories={categories}
-          />
-        )
-      }
+      {showEditModal && (
+        <EditProductModal
+          editProduct={editProduct}
+          closeModal={() => {
+            setShowEditModal(false);
+          }}
+          product={product}
+          categories={categories}
+        />
+      )}
     </>
   );
 }

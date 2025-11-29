@@ -17,46 +17,56 @@ export default function CategoryCard({
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   return (
     <>
-        <div className="border p-4 rounded-xl shadow-md">
-          {isEditing ? (
-            <>
-              <input
-                type="text"
-                className="text-black p-2 rounded-xl text-md"
-                value={editingName}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                  setEditingName(e.target.value);
-                }}
-              />
+      <div className="border p-4 rounded-xl shadow-md">
+        {isEditing ? (
+          <>
+            <input
+              type="text"
+              className="text-black p-2 rounded-xl text-md"
+              value={editingName}
+              onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                setEditingName(e.target.value);
+              }}
+            />
+            <button
+              onClick={() => {
+                editCategory(category._id, { name: editingName });
+                setIsEditing(false);
+              }}
+            >
+              Save
+            </button>
+            <button onClick={() => setIsEditing(false)}>Cancel</button>
+          </>
+        ) : (
+          <>
+            <h3 className="text-xl font-bold mb-2">{category.name}</h3>
+            <div>
               <button
                 onClick={() => {
-                  editCategory(category._id, { name: editingName });
-                  setIsEditing(false);
+                  setIsEditing(true);
                 }}
               >
-                Save
+                Edit
               </button>
-              <button onClick={() => setIsEditing(false)}>Cancel</button>
-            </>
-          ) : (
-            <>
-              <h3 className="text-xl font-bold mb-2">{category.name}</h3>
-              <div>
-                <button
-                  onClick={() => {
-                    setIsEditing(true);
-                  }}
-                >
-                  Edit
-                </button>
-                <button onClick={()=>{setShowDeleteModal(true)}}>Delete</button>
-              </div>
-            </>
-          )}
-        </div>
-        {showDeleteModal && (
-            <DeleteModal deleteFunction={deleteCategory} itemId={category._id} closeModal={()=>setShowDeleteModal(false)}/>
+              <button
+                onClick={() => {
+                  setShowDeleteModal(true);
+                }}
+              >
+                Delete
+              </button>
+            </div>
+          </>
         )}
+      </div>
+      {showDeleteModal && (
+        <DeleteModal
+          deleteFunction={deleteCategory}
+          itemId={category._id}
+          closeModal={() => setShowDeleteModal(false)}
+        />
+      )}
     </>
   );
 }

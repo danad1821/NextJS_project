@@ -17,10 +17,55 @@ export default function Dashboard() {
     useState<boolean>(false);
   const [showAddCategoryModal, setShowAddCategoryModal] =
     useState<boolean>(false);
+  const [filterSettings, setFilterSettings] = useState<any>({
+    searchQuery: "",
+    categories: [true, false],
+  });
 
   const closeModals = () => {
     setShowAddProductModal(false);
     setShowAddCategoryModal(false);
+  };
+
+  const filterProducts = () => {
+    let filtered = [...products];
+
+    // Filter by search query
+    if (filterSettings.searchQuery) {
+      filtered = filtered.filter(
+        (product) =>
+          product.title
+            .toLowerCase()
+            .includes(filterSettings.searchQuery.toLowerCase()) ||
+          product.description
+            .toLowerCase()
+            .includes(filterSettings.searchQuery.toLowerCase())
+      );
+    }
+
+    // Filter by categories and categories combined
+    if (filterSettings.categories.length > 0) {
+      filtered = filtered.filter((product) => {
+        const hasActiveFilter = filterSettings.categories.includes(true);
+        const hasInactiveFilter = filterSettings.categories.includes(false);
+        const hasCategoryFilter = filterSettings.categories.some(
+          (cat: any) => typeof cat === "string"
+        );
+
+        // categories check
+        const categoriesMatches =
+          (hasActiveFilter && product.isActive) ||
+          (hasInactiveFilter && !product.isActive);
+
+        // Category check
+        const categoryMatches = hasCategoryFilter
+          ? filterSettings.categories.includes(product.category)
+          : true;
+
+        return categoriesMatches && categoryMatches;
+      });
+    }
+    setDisplayedProducts(filtered);
   };
 
   const addCategory = async (categoryName: string) => {
@@ -67,7 +112,6 @@ export default function Dashboard() {
     try {
       const response = await axios.post("/api/products", productData);
       setProducts([...products, response.data]);
-      setDisplayedProducts([...displayedProducts, response.data]);
     } catch (error) {
       console.error("Error adding product:", error);
     }
@@ -83,7 +127,6 @@ export default function Dashboard() {
         product._id === productId ? response.data : product
       );
       setProducts(updatedProducts);
-      setDisplayedProducts(updatedProducts);
     } catch (error) {
       console.error("Error editing product:", error);
     }
@@ -96,7 +139,6 @@ export default function Dashboard() {
         (product) => product._id !== productId
       );
       setProducts(updatedProducts);
-      setDisplayedProducts(updatedProducts);
     } catch (error) {
       console.error("Error deleting product:", error);
     }
@@ -126,6 +168,10 @@ export default function Dashboard() {
     getAllProducts();
     getAllCategories();
   }, []);
+
+  useEffect(() => {
+    filterProducts();
+  }, [filterSettings, products]);
 
   return (
     <>
@@ -157,20 +203,81 @@ export default function Dashboard() {
           </button>
         </section>
         {toggleProducts ? (
-          <div className="flex gap-5 flex-wrap">
+          <div className="flex gap-5 ">
             <section className="bg-gray-200 h-full p-4 rounded-xl w-1/4">
               <h3>Filtering</h3>
               <div>
-                <input type="text" name="" id="" />
+                <input
+                  type="text"
+                  name=""
+                  id=""
+                  value={filterSettings.searchQuery}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    setFilterSettings({
+                      ...filterSettings,
+                      searchQuery: e.target.value,
+                    });
+                  }}
+                />
               </div>
               <div>
                 <div>
-                  <input type="checkbox" name="" id="" />
-                  <label htmlFor="">Active</label>
+                  <input
+                    type="checkbox"
+                    name="activeFilter"
+                    id="activeFilter"
+                    checked={filterSettings.categories.includes(true)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setFilterSettings((prev: any) => {
+                        if (e.target.checked) {
+                          return {
+                            ...prev,
+                            categories: prev.categories.includes(true)
+                              ? prev.categories
+                              : [...prev.categories, true],
+                          };
+                        } else {
+                          return {
+                            ...prev,
+                            categories: prev.categories.filter(
+                              (s: boolean) => s !== true
+                            ),
+                          };
+                        }
+                      });
+                    }}
+                  />
+                  <label htmlFor="activeFilter">Active</label>
                 </div>
                 <div>
-                  <input type="checkbox" name="" id="" />
-                  <label htmlFor="">Inactive</label>
+                  <input
+                    type="checkbox"
+                    name="inactiveFilter"
+                    id="inactiveFilter"
+                    checked={filterSettings.categories.includes(false)}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                      setFilterSettings((prev: any) => {
+                        if (e.target.checked) {
+                          // add false if missing
+                          return {
+                            ...prev,
+                            categories: prev.categories.includes(false)
+                              ? prev.categories
+                              : [...prev.categories, false],
+                          };
+                        } else {
+                          // remove false
+                          return {
+                            ...prev,
+                            categories: prev.categories.filter(
+                              (s: boolean) => s !== false
+                            ),
+                          };
+                        }
+                      });
+                    }}
+                  />
+                  <label htmlFor="inactiveFilter">Inactive</label>
                 </div>
               </div>
               <h4>Categories</h4>
@@ -184,6 +291,32 @@ export default function Dashboard() {
                         type="checkbox"
                         name={category._id}
                         id={category._id}
+                        checked={filterSettings.categories.includes(
+                          category._id
+                        )}
+                        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                          setFilterSettings((prev: any) => {
+                            if (e.target.checked) {
+                              // add category._id if missing
+                              return {
+                                ...prev,
+                                categories: prev.categories.includes(
+                                  category._id
+                                )
+                                  ? prev.categories
+                                  : [...prev.categories, category._id],
+                              };
+                            } else {
+                              // remove category._id
+                              return {
+                                ...prev,
+                                categories: prev.categories.filter(
+                                  (s: boolean) => s !== category._id
+                                ),
+                              };
+                            }
+                          });
+                        }}
                       />
                       <label htmlFor={category._id}>{category.name}</label>
                     </div>

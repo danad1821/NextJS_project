@@ -5,6 +5,7 @@ import Footer from "../_components/Footer";
 import AddProductModal from "../_components/AddProductModal";
 import AddCategoryModal from "../_components/AddCategoryModal";
 import axios from "axios";
+import ProductCard from "../_components/ProductCard";
 
 export default function Dashboard() {
   const [products, setProducts] = useState<Array<any>>([]);
@@ -38,6 +39,19 @@ export default function Dashboard() {
       setDisplayedProducts([...displayedProducts, response.data]);
     } catch (error) {
       console.error("Error adding product:", error);
+    }
+  };
+
+  const deleteProduct = async (productId: string) => {
+    try{
+      await axios.delete(`/api/products/${productId}`);
+      const updatedProducts = products.filter(
+        (product) => product._id !== productId
+      );
+      setProducts(updatedProducts);
+      setDisplayedProducts(updatedProducts);
+    }catch(error){
+      console.error("Error deleting product:", error);
     }
   };
 
@@ -128,18 +142,15 @@ export default function Dashboard() {
           </section>
           <section>
             <h3>Products</h3>
-            {displayedProducts.length === 0 ? (
-              <p>No products available.</p>
-            ) : (
-              displayedProducts.map((product) => (
-                <div key={product._id} className="border p-4 mb-4">
-                  <h4>{product.name}</h4>
-                  <p>{product.description}</p>
-                  <p>Price: ${product.price}</p>
-                  <p>Status: {product.isActive ? "Active" : "Inactive"}</p>
-                </div>
-              ))
-            )}
+            <div className="flex flex-wrap items-center">
+              {displayedProducts.length === 0 ? (
+                <p>No products available.</p>
+              ) : (
+                displayedProducts.map((product) => (
+                  <ProductCard key={product._id} product={product} deleteProduct={deleteProduct} />
+                ))
+              )}
+            </div>
           </section>
         </div>
       </main>

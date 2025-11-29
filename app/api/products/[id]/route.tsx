@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 import { connectToDatabase } from "@/app/_lib/db";
 import Product from "@/app/_models/Product";
+import { ObjectId } from "mongodb";
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
     try {
+        const {id} = await params; 
         await connectToDatabase();
         const data = await request.json();
-        const updatedProduct = await Product.findByIdAndUpdate(params.id, data, { new: true });
+        const updatedProduct = await Product.findByIdAndUpdate(new ObjectId(id), data, { new: true });
         if (!updatedProduct) {
             return NextResponse.json(
                 { error: "Product not found" },
@@ -25,8 +27,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
     try {
+        const {id} = await params; 
         await connectToDatabase();
-        const deletedProduct = await Product.findByIdAndDelete(params.id);
+        const deletedProduct = await Product.findByIdAndDelete(new ObjectId(id));
         if (!deletedProduct) {
             return NextResponse.json(
                 { error: "Product not found" },

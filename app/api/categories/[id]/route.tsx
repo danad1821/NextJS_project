@@ -26,9 +26,10 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
     try {
+        const {id} = await params; 
         await connectToDatabase();
         const data = await request.json();
-        const updatedCategory = await Category.findByIdAndUpdate(params.id, data, { new: true });
+        const updatedCategory = await Category.findByIdAndUpdate(new ObjectId(id), data, { new: true });
         if (!updatedCategory) {
             return NextResponse.json(
                 { error: "Category not found" },
@@ -47,8 +48,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
     try {
+        const {id} = await params; 
         await connectToDatabase();
-        const deletedCategory = await Category.findByIdAndDelete(params.id);
+        const deletedCategory = await Category.findByIdAndDelete(new ObjectId(id));
         if (!deletedCategory) {
             return NextResponse.json(
                 { error: "Category not found" },

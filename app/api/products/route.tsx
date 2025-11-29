@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { writeFile, mkdir } from 'fs/promises';
+import { join } from 'path';
 import { connectToDatabase } from "@/app/_lib/db";
 import Product from "@/app/_models/Product";
 

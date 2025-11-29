@@ -31,6 +31,16 @@ export default function Dashboard() {
     }
   };
 
+  const addProduct = async (productData: any) => {
+    try {
+      const response = await axios.post("/api/products", productData);
+      setProducts([...products, response.data]);
+      setDisplayedProducts([...displayedProducts, response.data]);
+    } catch (error) {
+      console.error("Error adding product:", error);
+    }
+  };
+
   const getAllProducts = async () => {
     try {
       const response = await axios.get("/api/products");
@@ -85,17 +95,17 @@ export default function Dashboard() {
         <div className="flex gap-5 flex-wrap">
           <section className="bg-gray-200 h-full p-4 rounded-xl w-1/4">
             <h3>Filtering</h3>
-            <div><input type="text" name="" id="" /></div>
+            <div>
+              <input type="text" name="" id="" />
+            </div>
             <div>
               <div>
                 <input type="checkbox" name="" id="" />
                 <label htmlFor="">Active</label>
-                
               </div>
               <div>
                 <input type="checkbox" name="" id="" />
                 <label htmlFor="">Inactive</label>
-                
               </div>
             </div>
             <h4>Categories</h4>
@@ -134,7 +144,13 @@ export default function Dashboard() {
         </div>
       </main>
       <Footer />
-      {showAddProductModal && <AddProductModal closeModal={closeModals} />}
+      {showAddProductModal && (
+        <AddProductModal
+          closeModal={closeModals}
+          addProduct={addProduct}
+          categories={categories}
+        />
+      )}
       {showAddCategoryModal && (
         <AddCategoryModal closeModal={closeModals} addCategory={addCategory} />
       )}

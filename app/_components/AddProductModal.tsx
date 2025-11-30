@@ -181,10 +181,10 @@ export default function AddProductModal({
                 ))}
               </select>
             </div>
-            <div className="flex mb-[3px] items-center gap-2">
+            <div className="flex mb-[3px] items-center gap-2 justify-center">
               <input
                 type="checkbox"
-                className="text-black p-2 rounded-xl text-md"
+                className="text-black p-2 rounded-xl text-md accent-[#FF9500]"
                 name="isActive"
                 id="isActive"
                 checked={productInfo.isActive}
@@ -198,7 +198,7 @@ export default function AddProductModal({
               <label htmlFor="isActive">Active</label>
             </div>
             <div className="flex justify-center items-center">
-              <button type="submit">Add</button>
+              <button type="submit" className="bg-[#FF9500] rounded-xl p-2 my-2 hover:brightness-90">Add</button>
             </div>
           </form>
         </div>

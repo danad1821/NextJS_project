@@ -70,16 +70,16 @@ export default function RegisterModal({ closeModal }: RegisterModalProps) {
     <>
       <div className="absolute inset-0 bg-black w-full h-screen opacity-50"></div>
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="bg-blue-500 rounded-xl p-6 text-white">
-          <div className="flex justify-between items-center border-b">
-            <h2>Register</h2>
-            <button onClick={() => closeModal()}>
+        <div className="bg-[#3478F6] rounded-xl p-6 text-white">
+          <div className="flex justify-between items-center border-b py-2">
+            <h2 className="text-xl">Register</h2>
+            <button onClick={() => closeModal()} className="text-xl">
               <IoMdClose />
             </button>
           </div>
           <form onSubmit={handleSubmit} className="my-2">
             <div className="flex flex-col mb-[3px]">
-              <label htmlFor="registerEmail">Email</label>
+              <label htmlFor="registerEmail" className="text-lg">Email</label>
               <input
                 className="text-black p-2 rounded-xl text-md"
                 type="email"
@@ -92,7 +92,7 @@ export default function RegisterModal({ closeModal }: RegisterModalProps) {
               />
             </div>
             <div className="flex flex-col mb-[3px]">
-              <label htmlFor="registerPassword">Password:</label>
+              <label htmlFor="registerPassword" className="text-lg">Password:</label>
               <input
                 className="text-black p-2 rounded-xl text-md"
                 type="password"
@@ -108,7 +108,7 @@ export default function RegisterModal({ closeModal }: RegisterModalProps) {
               />
             </div>
             <div className="flex flex-col mb-[3px]">
-              <label htmlFor="registerConfirmPassword">Confirm Password:</label>
+              <label htmlFor="registerConfirmPassword" className="text-lg">Confirm Password:</label>
               <input
                 className="text-black p-2 rounded-xl text-md"
                 type="password"
@@ -124,11 +124,11 @@ export default function RegisterModal({ closeModal }: RegisterModalProps) {
               />
             </div>
             <div className="flex justify-center items-center">
-              <button type="submit">Register</button>
+              <button type="submit" className="bg-[#FF9500] rounded-xl p-2 my-2 hover:brightness-90">Register</button>
             </div>
           </form>
           {errorMessage && (
-            <div className="text-red-500 text-center">{errorMessage}</div>
+            <div className="mt-2 text-red-500 max-w-[200px] text-center bg-white rounded-xl border-red-500 p-1">{errorMessage}</div>
           )}
         </div>
       </div>

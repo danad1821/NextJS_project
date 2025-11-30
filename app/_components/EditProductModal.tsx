@@ -188,7 +188,7 @@ export default function EditProductModal({
               <label htmlFor="isActive">Active</label>
             </div>
             <div className="flex justify-center items-center">
-              <button type="submit">Save</button>
+              <button type="submit" className="bg-[#FF9500] rounded-xl p-2 my-2 hover:brightness-90">Save</button>
             </div>
           </form>
         </div>

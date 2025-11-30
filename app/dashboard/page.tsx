@@ -7,8 +7,10 @@ import AddCategoryModal from "../_components/AddCategoryModal";
 import axios from "axios";
 import ProductCard from "../_components/ProductCard";
 import CategoryCard from "../_components/CategoryCard";
+import Loader from "../_components/Loader";
 
 export default function Dashboard() {
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [products, setProducts] = useState<Array<any>>([]);
   const [displayedProducts, setDisplayedProducts] = useState<Array<any>>([]);
   const [toggleProducts, setToggleProducts] = useState<boolean>(true);
@@ -167,20 +169,28 @@ export default function Dashboard() {
   useEffect(() => {
     getAllProducts();
     getAllCategories();
+    return () => setIsLoading(false);
   }, []);
 
   useEffect(() => {
     filterProducts();
   }, [filterSettings, products]);
 
+  if (isLoading) {
+    return (
+      <div className="flex flex-col justify-center items-center h-screen w-full bg-[#F5F5F7]">
+        <Loader />
+      </div>
+    );
+  }
+
   return (
     <>
       <Header />
       <main className="custom-container">
-        <h2>Dashboard</h2>
-        <section className="flex justify-end gap-4 mb-4">
+        <section className="flex justify-end gap-4 my-4">
           <button
-            className="bg-blue-500 rounded-xl text-white p-2"
+            className="bg-blue-500 rounded-xl text-white p-2 hover:brightness-90"
             onClick={() => {
               setShowAddProductModal(true);
             }}
@@ -188,7 +198,7 @@ export default function Dashboard() {
             Add Product
           </button>
           <button
-            className="bg-blue-500 rounded-xl text-white p-2"
+            className="bg-blue-500 rounded-xl text-white p-2 hover:brightness-90"
             onClick={() => {
               setShowAddCategoryModal(true);
             }}
@@ -196,7 +206,7 @@ export default function Dashboard() {
             Add Category
           </button>
           <button
-            className="bg-blue-500 rounded-xl text-white p-2"
+            className="bg-blue-500 rounded-xl text-white p-2 hover:brightness-90"
             onClick={() => setToggleProducts(!toggleProducts)}
           >
             {toggleProducts ? "Show Categories" : "Show Products"}
@@ -204,10 +214,12 @@ export default function Dashboard() {
         </section>
         {toggleProducts ? (
           <div className="flex gap-5 ">
-            <section className="bg-gray-200 h-full p-4 rounded-xl w-1/4">
-              <h3>Filtering</h3>
+            <section className="bg-gray-200 h-full p-4 rounded-xl w-[300px]">
+              <h3 className="text-lg font-bold mb-2">Filtering</h3>
               <div>
                 <input
+                  className="text-black p-2 rounded-xl text-md"
+                  placeholder="Search for product..."
                   type="text"
                   name=""
                   id=""
@@ -220,7 +232,7 @@ export default function Dashboard() {
                   }}
                 />
               </div>
-              <div>
+              <div className="flex gap-2 my-1">
                 <div>
                   <input
                     type="checkbox"
@@ -249,7 +261,7 @@ export default function Dashboard() {
                   />
                   <label htmlFor="activeFilter">Active</label>
                 </div>
-                <div>
+                <div className="">
                   <input
                     type="checkbox"
                     name="inactiveFilter"
@@ -280,7 +292,7 @@ export default function Dashboard() {
                   <label htmlFor="inactiveFilter">Inactive</label>
                 </div>
               </div>
-              <h4>Categories</h4>
+              <h4 className="text-md font-bold mt-2 mb-1">Categories</h4>
               <div className="flex flex-col ">
                 {categories.length === 0 ? (
                   <p>No categories available.</p>
@@ -325,7 +337,7 @@ export default function Dashboard() {
               </div>
             </section>
             <section>
-              <h3>Products</h3>
+              <h3 className="text-lg font-bold mb-2">Products</h3>
               <div className="flex flex-wrap items-center">
                 {displayedProducts.length === 0 ? (
                   <p>No products available.</p>
@@ -345,7 +357,7 @@ export default function Dashboard() {
           </div>
         ) : (
           <div>
-            <h3>Categories</h3>
+            <h3 className="text-lg font-bold mb-2">Categories</h3>
             <div className="flex ">
               {categories.length === 0 ? (
                 <p>No categories available.</p>

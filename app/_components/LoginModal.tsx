@@ -2,7 +2,7 @@
 import { IoMdClose } from "react-icons/io";
 import axios from "axios";
 import { useState } from "react";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
 type LoginModalProps = {
   closeModal: () => void;
@@ -24,7 +24,7 @@ export default function LoginModal({ closeModal }: LoginModalProps) {
   });
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if(!loginInfo.email || !loginInfo.password) {
+    if (!loginInfo.email || !loginInfo.password) {
       setErrorMessage("Please fill in all fields.");
       setTimeout(() => {
         setErrorMessage("");
@@ -32,7 +32,7 @@ export default function LoginModal({ closeModal }: LoginModalProps) {
       return;
     }
 
-    if(!/\S+@\S+\.\S+/.test(loginInfo.email)) {
+    if (!/\S+@\S+\.\S+/.test(loginInfo.email)) {
       setErrorMessage("Please enter a valid email address.");
       setTimeout(() => {
         setErrorMessage("");
@@ -43,9 +43,11 @@ export default function LoginModal({ closeModal }: LoginModalProps) {
     try {
       const response = await axios.post("/api/users", loginInfo);
       closeModal();
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch (error) {
-      setErrorMessage("Login failed. Please check your credentials and try again.");
+      setErrorMessage(
+        "Login failed. Please check your credentials and try again."
+      );
       setTimeout(() => {
         setErrorMessage("");
       }, 5000);
@@ -56,16 +58,18 @@ export default function LoginModal({ closeModal }: LoginModalProps) {
     <>
       <div className="absolute inset-0 bg-black w-full h-screen opacity-50"></div>
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className="bg-blue-500 rounded-xl p-6 text-white">
-          <div className="flex justify-between items-center border-b">
-            <h2>Login</h2>
-            <button onClick={() => closeModal()}>
+        <div className="bg-[#3478F6] rounded-xl p-6 text-white">
+          <div className="flex justify-between items-center border-b py-2">
+            <h2 className="text-xl">Login</h2>
+            <button onClick={() => closeModal()} className="text-xl">
               <IoMdClose />
             </button>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} className="my-2">
             <div className="flex flex-col mb-[3px]">
-              <label htmlFor="loginEmail">Email:</label>
+              <label htmlFor="loginEmail" className="text-lg">
+                Email:
+              </label>
               <input
                 className="text-black p-2 rounded-xl text-md"
                 type="email"
@@ -78,7 +82,9 @@ export default function LoginModal({ closeModal }: LoginModalProps) {
               />
             </div>
             <div className="flex flex-col mb-[3px]">
-              <label htmlFor="loginPassword">Password:</label>
+              <label htmlFor="loginPassword" className="text-lg">
+                Password:
+              </label>
               <input
                 className="text-black p-2 rounded-xl text-md"
                 type="password"
@@ -91,11 +97,18 @@ export default function LoginModal({ closeModal }: LoginModalProps) {
               />
             </div>
             <div className="flex justify-center items-center">
-              <button type="submit">Login</button>
+              <button
+                type="submit"
+                className="bg-[#FF9500] rounded-xl p-2 my-2 hover:brightness-90"
+              >
+                Login
+              </button>
             </div>
           </form>
           {errorMessage && (
-            <div className="mt-2 text-red-500">{errorMessage}</div>
+            <div className="mt-2 text-red-500 max-w-[200px] text-center bg-white rounded-xl border-red-500 p-1">
+              {errorMessage}
+            </div>
           )}
         </div>
       </div>

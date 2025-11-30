@@ -16,7 +16,7 @@ export default function DeleteModal({
           <h2>Are you sure you want to delete?</h2>
           <div className="flex justify-end gap-4 mt-4">
             <button
-              className="bg-red-500 rounded-xl p-2 text-white"
+              className="bg-red-500 rounded-xl p-2 text-white hover:brightness-90"
               onClick={() => {
                 deleteFunction(itemId);
                 closeModal();
@@ -25,7 +25,7 @@ export default function DeleteModal({
               Yes
             </button>
             <button
-              className="bg-green-500 rounded-xl p-2 text-white"
+              className="bg-green-500 rounded-xl p-2 text-white hover:brightness-90"
               onClick={() => {
                 closeModal();
               }}

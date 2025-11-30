@@ -25,8 +25,8 @@ export default function AddCategoryModal({
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="bg-blue-500 rounded-xl p-6 text-white">
           <div className="flex justify-between items-center border-b">
-            <h2>Add Category</h2>
-            <button onClick={() => closeModal()}>
+            <h2 className="text-xl">Add Category</h2>
+            <button onClick={() => closeModal()} className="text-xl">
               <IoMdClose />
             </button>
           </div>
@@ -43,7 +43,7 @@ export default function AddCategoryModal({
               />
             </div>
             <div className="flex justify-center items-center">
-              <button type="submit">Add</button>
+              <button type="submit" className="bg-[#FF9500] rounded-xl p-2 my-2 hover:brightness-90">Add</button>
             </div>
           </form>
         </div>

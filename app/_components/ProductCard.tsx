@@ -54,7 +54,7 @@ export default function ProductCard({
         </div>
         <div className="flex items-center justify-end gap-2">
           <button
-            className="bg-green-500 text-white p-2 rounded-xl"
+            className="p-2 rounded-xl bg-[#FF9500] text-white mx-2 hover:brightness-90"
             onClick={() => {
               setShowEditModal(true);
             }}
@@ -62,7 +62,7 @@ export default function ProductCard({
             Edit
           </button>
           <button
-            className="bg-red-500 text-white p-2 rounded-xl"
+            className="bg-red-500 text-white p-2 rounded-xl hover:brightness-90"
             onClick={() => {
               setShowDeleteModal(true);
             }}

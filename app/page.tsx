@@ -11,18 +11,18 @@ export default function Home() {
   };
   return (
     <>
-      <div className="">
-        <h1>Product Management Dashboard</h1>
+      <div className="flex flex-col justify-center items-center h-screen w-full bg-[#F5F5F7]">
+        <h1 className="text-3xl my-10">Product Management Dashboard</h1>
         <div className="flex gap-4">
           <button
             onClick={() => setOpenRegisterModal(true)}
-            className="bg-blue-500 p-2 rounded-xl"
+            className="bg-[#3478F6] p-2 rounded-xl text-lg text-white hover:brightness-90"
           >
             Register
           </button>
           <button
             onClick={() => setOpenLoginModal(true)}
-            className="bg-blue-500 p-2 rounded-xl"
+            className="bg-[#3478F6] p-2 rounded-xl text-lg text-white hover:brightness-90"
           >
             Login
           </button>
